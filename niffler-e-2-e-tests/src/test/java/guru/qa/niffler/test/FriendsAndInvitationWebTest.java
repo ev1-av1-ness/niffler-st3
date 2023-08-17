@@ -1,6 +1,5 @@
 package guru.qa.niffler.test;
 
-
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.User;
 import guru.qa.niffler.model.UserJson;
@@ -9,9 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
+import static guru.qa.niffler.jupiter.User.UserType.INVITATION_SENT;
 import static guru.qa.niffler.jupiter.User.UserType.WITH_FRIENDS;
 
-public class FriendsWebTest extends BaseWebTest {
+public class FriendsAndInvitationWebTest extends BaseWebTest {
 
     @BeforeEach
     void doLogin(@User(userType = WITH_FRIENDS) UserJson userForTest) {
@@ -23,7 +23,8 @@ public class FriendsWebTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("101")
-    void friendShouldBeDisplayedInTable0(@User(userType = WITH_FRIENDS) UserJson userForTest) {
+    @AllureId("105")
+    void test(@User(userType = WITH_FRIENDS) UserJson userForTest, @User(userType = INVITATION_SENT) UserJson userForTestAnother) {
+
     }
 }

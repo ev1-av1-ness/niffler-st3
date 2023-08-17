@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.Queue;
@@ -38,19 +40,27 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        Parameter[] parameters = context.getRequiredTestMethod().getParameters();
-        for (Parameter parameter : parameters) {
-            if (parameter.getType().isAssignableFrom(UserJson.class)) {
-                User parameterAnnotation = parameter.getAnnotation(User.class);
-                User.UserType userType = parameterAnnotation.userType();
-                Queue<UserJson> usersQueueByType = usersQueue.get(parameterAnnotation.userType());
-                UserJson candidateForTest = null;
-                while (candidateForTest == null) {
-                    candidateForTest = usersQueueByType.poll();
+        Parameter[] parameters = null;
+        Method[] methods = context.getRequiredTestClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(User.class)) {
+                parameters = method.getParameters();
+            }
+        }
+        if (parameters != null) {
+            for (Parameter parameter : parameters) {
+                if (parameter.getType().isAssignableFrom(UserJson.class)) {
+                    User parameterAnnotation = parameter.getAnnotation(User.class);
+                    User.UserType userType = parameterAnnotation.userType();
+                    Queue<UserJson> usersQueueByType = usersQueue.get(parameterAnnotation.userType());
+                    UserJson candidateForTest = null;
+                    while (candidateForTest == null) {
+                        candidateForTest = usersQueueByType.poll();
+                    }
+                    candidateForTest.setUserType(userType);
+                    context.getStore(NAMESPACE).put(getAllureId(context), candidateForTest);
+                    break;
                 }
-                candidateForTest.setUserType(userType);
-                context.getStore(NAMESPACE).put(getAllureId(context), candidateForTest);
-                break;
             }
         }
     }
