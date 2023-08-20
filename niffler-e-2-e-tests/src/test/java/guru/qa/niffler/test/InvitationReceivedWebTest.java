@@ -11,40 +11,47 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static guru.qa.niffler.jupiter.User.UserType.*;
+import static guru.qa.niffler.jupiter.User.UserType.INVITATION_RECEIVED;
+import static guru.qa.niffler.jupiter.User.UserType.INVITATION_SENT;
 import static io.qameta.allure.Allure.step;
 
-public class FriendsAndInvitationWebTest extends BaseWebTest {
+public class InvitationReceivedWebTest extends BaseWebTest {
 
-    @Test
-    @AllureId("109")
-    void friendsAndInvitationWebTest2(@User(userType = INVITATION_SENT) UserJson userForTest1, @User(userType = INVITATION_RECEIVED) UserJson userForTest2) {
+    @BeforeEach
+    void doLogin(@User(userType = INVITATION_RECEIVED) UserJson userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(userForTest1.getUsername());
-        $("input[name='password']").setValue(userForTest1.getPassword());
+        $("input[name='username']").setValue(userForTest.getUsername());
+        $("input[name='password']").setValue(userForTest.getPassword());
         $("button[type='submit']").click();
+    }
 
-        step("Открыть страницу \"Friends\"", ()->
+    @Test
+    @AllureId("105")
+    void friendShouldBeDisplayedInTable4(@User(userType = INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
+        step("Открыть страницу \"All people\"", ()->
                 $("[data-tooltip-id='people']").click());
 
-        step("Количество строк со статусом \"Pending invitation\" должно равняться 1", ()->
+        step("Количество кнопок \"Submit invitation\" должно равняться 1", ()->
                 $(".people-content").$("table")
                         .shouldBe(Condition.visible)
                         .$("tbody")
-                        .$$("td")
-                        .filterBy(text("Pending invitation"))
+                        .$$("[data-tooltip-id='submit-invitation']")
                         .shouldHave(CollectionCondition.size(1))
         );
 
-        step("Разлогиниться", ()->
-                $("[data-tooltip-id='logout']").click());
+        step("Количество кнопок \"Decline invitation\" должно равняться 1", ()->
+                $(".people-content").$("table")
+                        .shouldBe(Condition.visible)
+                        .$("tbody")
+                        .$$("[data-tooltip-id='decline-invitation']")
+                        .shouldHave(CollectionCondition.size(1))
+        );
+    }
 
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(userForTest2.getUsername());
-        $("input[name='password']").setValue(userForTest2.getPassword());
-        $("button[type='submit']").click();
-
+    @Test
+    @AllureId("106")
+    void friendShouldBeDisplayedInTable5(@User(userType = INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
         step("Открыть страницу \"All people\"", ()->
                 $("[data-tooltip-id='people']").click());
 
