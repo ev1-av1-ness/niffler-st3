@@ -28,8 +28,8 @@ public class FriendsWebTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("101")
-    void friendShouldBeDisplayedInTable0(@User(userType = WITH_FRIENDS) UserJson userForTest) throws InterruptedException {
+    @AllureId("105")
+    void friendShouldBeDisplayedInTable1(@User(userType = WITH_FRIENDS) UserJson userForTest) throws InterruptedException {
         step("Открыть страницу \"Friends\"", ()->
                 $("[data-tooltip-id='friends']").click());
 
@@ -45,8 +45,8 @@ public class FriendsWebTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("102")
-    void friendShouldBeDisplayedInTable1(@User(userType = WITH_FRIENDS) UserJson userForTest) throws InterruptedException {
+    @AllureId("106")
+    void friendShouldBeDisplayedInTable2(@User(userType = WITH_FRIENDS) UserJson userForTest) throws InterruptedException {
         step("Открыть страницу \"Friends\"", ()->
                 $("[data-tooltip-id='friends']").click());
 

@@ -16,6 +16,7 @@ import static guru.qa.niffler.jupiter.User.UserType.WITH_FRIENDS;
 import static io.qameta.allure.Allure.step;
 
 public class FriendsOnlyBeforeEachParamTest extends BaseWebTest {
+
     @BeforeEach
     void doLogin(@User(userType = WITH_FRIENDS) UserJson userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
@@ -26,8 +27,8 @@ public class FriendsOnlyBeforeEachParamTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("106")
-    void testFriendsOnlyBeforeEachParamTest() throws InterruptedException {
+    @AllureId("107")
+    void friendsOnlyBeforeEachParamTest() {
         step("Открыть страницу \"Friends\"", ()->
                 $("[data-tooltip-id='friends']").click());
 

@@ -6,7 +6,6 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.User;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.AllureId;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
@@ -14,11 +13,11 @@ import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.jupiter.User.UserType.*;
 import static io.qameta.allure.Allure.step;
 
-public class FriendsAndInvitationWebTest extends BaseWebTest {
+public class SendInvitationAndInvitationReceivedWebTest extends BaseWebTest {
 
     @Test
-    @AllureId("109")
-    void friendsAndInvitationWebTest2(@User(userType = INVITATION_SENT) UserJson userForTest1, @User(userType = INVITATION_RECEIVED) UserJson userForTest2) {
+    @AllureId("108")
+    void sendInvitationAndInvitationReceivedWebTest(@User(userType = INVITATION_SENT) UserJson userForTest1, @User(userType = INVITATION_RECEIVED) UserJson userForTest2) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(userForTest1.getUsername());

@@ -9,10 +9,8 @@ import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.jupiter.User.UserType.INVITATION_RECEIVED;
-import static guru.qa.niffler.jupiter.User.UserType.INVITATION_SENT;
 import static io.qameta.allure.Allure.step;
 
 public class InvitationReceivedWebTest extends BaseWebTest {
@@ -27,8 +25,8 @@ public class InvitationReceivedWebTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("105")
-    void friendShouldBeDisplayedInTable4(@User(userType = INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
+    @AllureId("103")
+    void invitationShouldBeDisplayedInTable3(@User(userType = INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
         step("Открыть страницу \"All people\"", ()->
                 $("[data-tooltip-id='people']").click());
 
@@ -50,8 +48,8 @@ public class InvitationReceivedWebTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("106")
-    void friendShouldBeDisplayedInTable5(@User(userType = INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
+    @AllureId("104")
+    void invitationShouldBeDisplayedInTable4(@User(userType = INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
         step("Открыть страницу \"All people\"", ()->
                 $("[data-tooltip-id='people']").click());
 
