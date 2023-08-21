@@ -5,6 +5,7 @@ import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
 
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -34,16 +35,14 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        Optional<Method> beforeEachMethod = Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
-                .filter(method -> method.isAnnotationPresent(BeforeEach.class)).findFirst();
+        Optional<Method> beforeEach = Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(BeforeEach.class))
+                .findFirst();
         Parameter[] parameters;
-        if (beforeEachMethod.isPresent()) {
-            parameters = beforeEachMethod.get().getParameters();
-        } else {
-            parameters = context.getRequiredTestMethod().getParameters();
-        }
+        parameters = beforeEach.map(Executable::getParameters)
+                .orElseGet(() -> context.getRequiredTestMethod().getParameters());
 
-        Map<User.UserType, UserJson> candidatesForTest = new HashMap<>();
+        Map<User.UserType, UserJson> candidatesForTest = new ConcurrentHashMap<>();
             for (Parameter parameter : parameters) {
                 if (parameter.getType().isAssignableFrom(UserJson.class)) {
                     User parameterAnnotation = parameter.getAnnotation(User.class);
