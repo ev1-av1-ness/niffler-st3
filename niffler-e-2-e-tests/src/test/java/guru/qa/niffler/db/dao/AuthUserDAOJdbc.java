@@ -79,6 +79,32 @@ public class AuthUserDAOJdbc implements AuthUserDAO, UserDataUserDAO {
     }
 
     @Override
+    public UserEntity getUserById(UUID userId) {
+        //из двух таблиц прочитал, объект сложил
+
+
+//        String query = "SELECT * FROM articles WHERE id=?";
+//        PreparedStatement statement = connection.prepareStatement(query);
+//        statement.setString(1, id);
+//        ResultSet rs = statement.executeQuery();
+//
+//        if (!rs.first()) {
+//            return null;
+//        }
+//
+//        return Map.of(
+//                "id", id,
+//                "title", rs.getString("title"),
+//                "body", rs.getString("body")
+//        );
+    }
+
+    @Override
+    public void updateUserById(UUID userId) {
+
+    }
+
+    @Override
     public int createUserInUserData(UserEntity user) {
         int createdRows = 0;
         try (Connection conn = userdataDs.getConnection()) {
@@ -100,6 +126,16 @@ public class AuthUserDAOJdbc implements AuthUserDAO, UserDataUserDAO {
 
     @Override
     public void deleteUserByIdInUserData(UUID userId) {
+
+    }
+
+    @Override
+    public UserEntity getUserByIdInUserData(UUID userId) {
+        return null;
+    }
+
+    @Override
+    public void updateUserByIdInUserData(UUID userId) {
 
     }
 }
