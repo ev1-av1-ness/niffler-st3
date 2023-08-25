@@ -13,7 +13,7 @@ public class DBUserExtensionWebTest extends BaseWebTest {
 
     @DBUser(username = "moon2", password = "12345")
     @Test
-    void mainPageShouldBeVisibleAfterLogin(UserEntity userForTest) {
+    void dbUserExtensionWebTestVisibleAfterLogin(UserEntity userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(userForTest.getUsername());
