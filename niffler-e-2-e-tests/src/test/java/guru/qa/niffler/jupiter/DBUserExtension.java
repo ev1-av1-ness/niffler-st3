@@ -38,6 +38,7 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
             context.getStore(NAMESPACE).put("user", user);
             authUserDAO.createUser(user);
             userDataUserDAO.createUserInUserData(user);
+        }
     }
 
     @Override
@@ -49,20 +50,11 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().getType().isAssignableFrom(UserEntity.class)
-                && parameterContext.getParameter().isAnnotationPresent(DBUser.class);
+        return parameterContext.getParameter().getType().isAssignableFrom(UserEntity.class);
     }
 
     @Override
     public UserEntity resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         return extensionContext.getStore(DBUserExtension.NAMESPACE).get("user", UserEntity.class);
-    }
-
-    private String getAllureId(ExtensionContext context) {
-        AllureId allureId = context.getRequiredTestMethod().getAnnotation(AllureId.class);
-        if (allureId == null) {
-            throw new IllegalStateException("Annotation @AllureId must be present!");
-        }
-        return allureId.value();
     }
 }

@@ -109,6 +109,7 @@ public class UserEntity {
         this.authorities = authorities;
     }
 
+
     public void addAuthorities(AuthorityEntity... authorities) {
         this.authorities.addAll(List.of(authorities));
     }
