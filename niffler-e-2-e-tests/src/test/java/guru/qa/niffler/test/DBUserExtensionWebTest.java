@@ -17,12 +17,8 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class DBUserExtensionWebTest extends BaseWebTest {
     @BeforeEach
-    void doLogin(@DBUser(username = "", password = "") UserEntity userForTest) {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(userForTest.getUsername());
-        $("input[name='password']").setValue(userForTest.getPassword());
-        $("button[type='submit']").click();
+    void doLogin(UserEntity userForTest) {
+        System.out.println(userForTest);
     }
 
     @Test

@@ -13,17 +13,7 @@ import java.util.List;
 @Retention(RetentionPolicy.RUNTIME)
 @ExtendWith({DBUserExtension.class})
 public @interface DBUser {
-    String getUsername();
+    String username();
 
-    String getPassword();
-
-    Boolean getEnabled();
-
-    Boolean getAccountNonExpired();
-
-    Boolean getAccountNonLocked();
-
-    Boolean getCredentialsNonExpired();
-
-    List<AuthorityEntity> getAuthorities();
+    String password();
 }
