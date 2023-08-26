@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter;
 
+import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthUserDAO;
 import guru.qa.niffler.db.dao.AuthUserDAOJdbc;
 import guru.qa.niffler.db.dao.UserDataUserDAO;
@@ -22,8 +23,19 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
         DBUser annotation = context.getRequiredTestMethod().getAnnotation(DBUser.class);
         if (annotation != null) {
             UserEntity user = new UserEntity();
-            user.setUsername(annotation.username());
-            user.setPassword(annotation.password());
+            if (annotation.username().isEmpty() && annotation.password().isEmpty()) {
+                user.setUsername(new Faker().name().username());
+                user.setPassword(new Faker().internet().password());
+            } else if (annotation.username().isEmpty()) {
+                user.setUsername(new Faker().name().username());
+                user.setPassword(annotation.password());
+            } else if (annotation.password().isEmpty()) {
+                user.setUsername(annotation.username());
+                user.setPassword(new Faker().internet().password());
+            } else {
+                user.setUsername(annotation.username());
+                user.setPassword(annotation.password());
+            }
             user.setEnabled(true);
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);
