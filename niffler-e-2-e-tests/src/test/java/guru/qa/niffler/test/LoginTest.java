@@ -10,6 +10,9 @@ import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.jupiter.annotation.Dao;
+import guru.qa.niffler.jupiter.extension.DaoExtension;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +53,6 @@ public class LoginTest extends BaseWebTest {
                 }).toList());
         authUserDAO.createUser(authUser);
 
-
         userdataUser = new UserDataUserEntity();
         userdataUser.setUsername("valentin_6");
         userdataUser.setCurrency(CurrencyValues.RUB);
@@ -59,15 +61,15 @@ public class LoginTest extends BaseWebTest {
 
     @AfterEach
     void deleteUser() {
-        userDataUserDAO.deleteUserByUsernameInUserData(user.getUsername());
-        authUserDAO.deleteUserById(user.getId());
+        userDataUserDAO.deleteUserByUsernameInUserData(userdataUser.getUsername());
+        authUserDAO.deleteUser(authUser);
     }
 
     @Test
     void mainPageShouldBeVisibleAfterLogin() {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(user.getUsername());
+        $("input[name='username']").setValue(authUser.getUsername());
         $("input[name='password']").setValue(defaultPassword);
         $("button[type='submit']").click();
         $(".main-content__section-stats").should(visible);

@@ -1,7 +1,7 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.db.model.UserEntity;
+import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.jupiter.DBUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,17 +11,17 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class DBUserExtensionBeforeTestGetUserWebTest extends BaseWebTest {
 
-    private UserEntity userForTest;
+    private AuthUserEntity userForTest;
 
     @BeforeEach
-    void beforeEach(UserEntity user) {
+    void beforeEach(AuthUserEntity user) {
         this.userForTest = user;
         System.out.println(userForTest.getUsername());
     }
 
     @DBUser(username = "moon2", password = "12345")
     @Test
-    void dbUserExtensionBeforeTestGetUserWebTest1(UserEntity user) {
+    void dbUserExtensionBeforeTestGetUserWebTest1(AuthUserEntity user) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(user.getUsername());
@@ -32,7 +32,7 @@ public class DBUserExtensionBeforeTestGetUserWebTest extends BaseWebTest {
 
     @DBUser(username = "moon4", password = "12345")
     @Test
-    void dbUserExtensionBeforeTestGetUserWebTest2(UserEntity user) {
+    void dbUserExtensionBeforeTestGetUserWebTest2(AuthUserEntity user) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(user.getUsername());
