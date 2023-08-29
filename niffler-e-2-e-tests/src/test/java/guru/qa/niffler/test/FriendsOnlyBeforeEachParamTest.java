@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.WITH_FRIENDS;
 import static io.qameta.allure.Allure.step;
 
-public class FriendsWebTest extends BaseWebTest {
+public class FriendsOnlyBeforeEachParamTest extends BaseWebTest {
 
     @BeforeEach
     void doLogin(@User(userType = WITH_FRIENDS) UserJson userForTest) {
@@ -27,25 +27,8 @@ public class FriendsWebTest extends BaseWebTest {
     }
 
     @Test
-    @AllureId("105")
-    void friendShouldBeDisplayedInTable1(@User(userType = WITH_FRIENDS) UserJson userForTest) throws InterruptedException {
-        step("Открыть страницу \"Friends\"", ()->
-                $("[data-tooltip-id='friends']").click());
-
-        SelenideElement friendsTable =
-                $(".people-content")
-                        .$("table")
-                        .shouldBe(Condition.visible);
-
-        friendsTable.$("tbody").$$("tr")
-                .shouldHave(CollectionCondition.size(1));
-        friendsTable.$("tbody").$$("td")
-                .filterBy(text("You are friends")).shouldHave(CollectionCondition.size(1));
-    }
-
-    @Test
-    @AllureId("106")
-    void friendShouldBeDisplayedInTable2(@User(userType = WITH_FRIENDS) UserJson userForTest) throws InterruptedException {
+    @AllureId("107")
+    void friendsOnlyBeforeEachParamTest() {
         step("Открыть страницу \"Friends\"", ()->
                 $("[data-tooltip-id='friends']").click());
 
