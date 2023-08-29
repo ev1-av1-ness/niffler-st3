@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Arrays;
 
 @ExtendWith(DaoExtension.class)
-public class DBDaoExtensionUpdateSpringJdbcTest {
+public class DBDaoExtensionDeleteSpringJdbcTest {
     @Dao
     private AuthUserDAO authUserDAO;
     @Dao
@@ -27,7 +27,7 @@ public class DBDaoExtensionUpdateSpringJdbcTest {
     @BeforeEach
     void createUser() {
         user = new UserEntity();
-        user.setUsername("valentin_10");
+        user.setUsername("valentin_11");
         user.setPassword("12345");
         user.setEnabled(true);
         user.setAccountNonExpired(true);
@@ -54,15 +54,5 @@ public class DBDaoExtensionUpdateSpringJdbcTest {
     void dbUserCreateReadAndDeleteTest() {
         UserEntity getUser = authUserDAO.getUserById(user.getId());
         Assertions.assertEquals(user.getUsername(), getUser.getUsername());
-    }
-
-
-    @Test
-    void dbUserCreateUpdateAndReadTest() {
-        user.setUsername("valentin_updated");
-        user = authUserDAO.updateUser(user);
-
-        UserEntity getUser = authUserDAO.getUserById(user.getId());
-        Assertions.assertEquals("valentin_updated", getUser.getUsername());
     }
 }
