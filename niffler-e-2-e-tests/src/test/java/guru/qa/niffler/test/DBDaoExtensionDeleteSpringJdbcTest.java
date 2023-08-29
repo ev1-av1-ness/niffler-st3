@@ -27,7 +27,7 @@ public class DBDaoExtensionDeleteSpringJdbcTest {
     @BeforeEach
     void createUser() {
         user = new UserEntity();
-        user.setUsername("valentin_11");
+        user.setUsername("valentin_152");
         user.setPassword("12345");
         user.setEnabled(true);
         user.setAccountNonExpired(true);

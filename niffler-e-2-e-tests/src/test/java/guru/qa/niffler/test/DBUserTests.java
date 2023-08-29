@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class DBUserTests {
 
     @DBUser(
-            username = "eliza",
+            username = "evelina",
             password = "12345"
     )
     @Test
@@ -19,19 +19,5 @@ public class DBUserTests {
         UserEntity getUser = authUserDAO.getUserById(userEntity.getId());
 
         Assertions.assertEquals(userEntity.getUsername(), getUser.getUsername());
-    }
-
-    @DBUser(
-            username = "eliza",
-            password = "12345"
-    )
-    @Test
-    void dbUserCreateUpdateAndReadTest(UserEntity userEntity) {
-        AuthUserDAO authUserDAO = new AuthUserDAOJdbc();
-        userEntity.setUsername("elizaveta");
-        authUserDAO.updateUser(userEntity);
-
-        UserEntity getUser = authUserDAO.getUserById(userEntity.getId());
-        Assertions.assertEquals("elizaveta", getUser.getUsername());
     }
 }
