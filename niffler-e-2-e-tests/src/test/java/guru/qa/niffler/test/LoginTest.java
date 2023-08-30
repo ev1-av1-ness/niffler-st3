@@ -38,7 +38,7 @@ public class LoginTest extends BaseWebTest {
     @BeforeEach
     void createUser() {
         authUser = new AuthUserEntity();
-        authUser.setUsername("valentin_6");
+        authUser.setUsername("valentin_12");
         authUser.setPassword(defaultPassword);
         authUser.setEnabled(true);
         authUser.setAccountNonExpired(true);
@@ -54,15 +54,15 @@ public class LoginTest extends BaseWebTest {
         authUserDAO.createUser(authUser);
 
         userdataUser = new UserDataUserEntity();
-        userdataUser.setUsername("valentin_6");
+        userdataUser.setUsername("valentin_12");
         userdataUser.setCurrency(CurrencyValues.RUB);
         userDataUserDAO.createUserInUserData(userdataUser);
     }
 
     @AfterEach
     void deleteUser() {
+        authUserDAO.deleteUserById(authUser.getId());
         userDataUserDAO.deleteUserByUsernameInUserData(userdataUser.getUsername());
-        authUserDAO.deleteUser(authUser);
     }
 
     @Test

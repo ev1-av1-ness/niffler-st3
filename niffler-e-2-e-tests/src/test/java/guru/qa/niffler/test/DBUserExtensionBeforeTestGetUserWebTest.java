@@ -2,7 +2,7 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
-import guru.qa.niffler.jupiter.DBUser;
+import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ public class DBUserExtensionBeforeTestGetUserWebTest extends BaseWebTest {
         System.out.println(userForTest.getUsername());
     }
 
-    @DBUser(username = "moon2", password = "12345")
+    @DBUser(username = "moon6", password = "12345")
     @Test
     void dbUserExtensionBeforeTestGetUserWebTest1(AuthUserEntity user) {
         Selenide.open("http://127.0.0.1:3000/main");
@@ -30,7 +30,7 @@ public class DBUserExtensionBeforeTestGetUserWebTest extends BaseWebTest {
         $(".main-content__section-stats").should(visible);
     }
 
-    @DBUser(username = "moon4", password = "12345")
+    @DBUser(username = "moon7", password = "12345")
     @Test
     void dbUserExtensionBeforeTestGetUserWebTest2(AuthUserEntity user) {
         Selenide.open("http://127.0.0.1:3000/main");

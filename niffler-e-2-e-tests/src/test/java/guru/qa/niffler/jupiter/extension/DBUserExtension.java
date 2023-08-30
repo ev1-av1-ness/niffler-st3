@@ -1,4 +1,4 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.db.dao.AuthUserDAO;
 import guru.qa.niffler.db.dao.UserDataUserDAO;
@@ -8,6 +8,7 @@ import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.extension.*;
 
 import java.util.Arrays;
@@ -36,21 +37,22 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
                         return ae;
                     }).toList()
             );
-            context.getStore(NAMESPACE).put("user", user);
             authUserDAO.createUser(user);
 
             UserDataUserEntity userdataUser = new UserDataUserEntity();
-            userdataUser.setUsername("valentin_6");
+            userdataUser.setUsername(user.getUsername());
             userdataUser.setCurrency(CurrencyValues.RUB);
             userDataUserDAO.createUserInUserData(userdataUser);
+
+            context.getStore(NAMESPACE).put(context.getUniqueId(), user);
         }
     }
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        var user = context.getStore(NAMESPACE).get("user", AuthUserEntity.class);
+        var user = context.getStore(NAMESPACE).get(context.getUniqueId(), AuthUserEntity.class);
+        authUserDAO.deleteUserById(user.getId());
         userDataUserDAO.deleteUserByUsernameInUserData(user.getUsername());
-        authUserDAO.deleteUser(user);
     }
 
     @Override
@@ -60,6 +62,6 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
 
     @Override
     public AuthUserEntity resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(DBUserExtension.NAMESPACE).get("user", AuthUserEntity.class);
+        return extensionContext.getStore(DBUserExtension.NAMESPACE).get(extensionContext.getUniqueId(),  AuthUserEntity.class);
     }
 }

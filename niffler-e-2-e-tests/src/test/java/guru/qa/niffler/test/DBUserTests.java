@@ -3,7 +3,7 @@ package guru.qa.niffler.test;
 import guru.qa.niffler.db.dao.AuthUserDAO;
 import guru.qa.niffler.db.dao.impl.AuthUserDAOJdbc;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
-import guru.qa.niffler.jupiter.DBUser;
+import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,10 +28,10 @@ public class DBUserTests {
     @Test
     void dbUserCreateUpdateAndReadTest(AuthUserEntity userEntity) {
         AuthUserDAO authUserDAO = new AuthUserDAOJdbc();
-        userEntity.setUsername("elizaveta");
+        userEntity.setEnabled(false);
         authUserDAO.updateUser(userEntity);
 
         AuthUserEntity getUser = authUserDAO.getUserById(userEntity.getId());
-        Assertions.assertEquals("elizaveta", getUser.getUsername());
+        Assertions.assertFalse(getUser.getEnabled());
     }
 }

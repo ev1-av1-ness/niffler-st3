@@ -17,7 +17,7 @@ public class AuthUserDAOHibernate implements AuthUserDAO {
     }
 
     @Override
-    public void deleteUser(AuthUserEntity userId) {
+    public void deleteUserById(UUID userId) {
 
     }
 

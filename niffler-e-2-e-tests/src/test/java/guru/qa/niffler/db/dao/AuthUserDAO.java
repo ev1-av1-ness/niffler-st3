@@ -14,7 +14,7 @@ public interface AuthUserDAO {
 
     AuthUserEntity updateUser(AuthUserEntity user);
 
-    void deleteUser(AuthUserEntity userId);
+    void deleteUserById(UUID userId);
 
     AuthUserEntity getUserById(UUID userId);
 }
