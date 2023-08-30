@@ -80,7 +80,7 @@ public class AuthUserDAOSpringJdbc implements AuthUserDAO, UserDataUserDAO {
     }
 
     @Override
-    public void deleteUser(AuthUserEntity userId) {
+    public void deleteUserById(UUID userId) {
 
     }
 

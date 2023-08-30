@@ -10,20 +10,27 @@ import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.jupiter.annotation.Dao;
+import guru.qa.niffler.jupiter.extension.DaoExtension;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
+@ExtendWith(DaoExtension.class)
 public class LoginTest extends BaseWebTest {
 
     private static final String defaultPassword = "12345";
 
-    private AuthUserDAO authUserDAO = new AuthUserDAOHibernate();
-    private UserDataUserDAO userDataUserDAO = new UserdataUserDAOHibernate();
+    @Dao
+    private AuthUserDAO authUserDAO;
+    @Dao
+    private UserDataUserDAO userDataUserDAO;
 
     private AuthUserEntity authUser;
     private UserDataUserEntity userdataUser;
@@ -31,7 +38,7 @@ public class LoginTest extends BaseWebTest {
     @BeforeEach
     void createUser() {
         authUser = new AuthUserEntity();
-        authUser.setUsername("valentin_6");
+        authUser.setUsername("valentin_12");
         authUser.setPassword(defaultPassword);
         authUser.setEnabled(true);
         authUser.setAccountNonExpired(true);
@@ -46,13 +53,17 @@ public class LoginTest extends BaseWebTest {
                 }).toList());
         authUserDAO.createUser(authUser);
 
-
         userdataUser = new UserDataUserEntity();
-        userdataUser.setUsername("valentin_6");
+        userdataUser.setUsername("valentin_12");
         userdataUser.setCurrency(CurrencyValues.RUB);
         userDataUserDAO.createUserInUserData(userdataUser);
     }
 
+    @AfterEach
+    void deleteUser() {
+        authUserDAO.deleteUserById(authUser.getId());
+        userDataUserDAO.deleteUserByUsernameInUserData(userdataUser.getUsername());
+    }
 
     @Test
     void mainPageShouldBeVisibleAfterLogin() {
