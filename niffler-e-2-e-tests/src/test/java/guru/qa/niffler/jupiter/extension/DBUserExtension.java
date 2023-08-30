@@ -1,13 +1,15 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.extension;
 
 import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthUserDAO;
-import guru.qa.niffler.db.dao.AuthUserDAOJdbc;
 import guru.qa.niffler.db.dao.UserDataUserDAO;
-import guru.qa.niffler.db.model.Authority;
-import guru.qa.niffler.db.model.AuthorityEntity;
-import guru.qa.niffler.db.model.UserEntity;
-import io.qameta.allure.AllureId;
+import guru.qa.niffler.db.dao.impl.AuthUserDAOJdbc;
+import guru.qa.niffler.db.model.CurrencyValues;
+import guru.qa.niffler.db.model.auth.AuthUserEntity;
+import guru.qa.niffler.db.model.auth.Authority;
+import guru.qa.niffler.db.model.auth.AuthorityEntity;
+import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.extension.*;
 
 import java.util.Arrays;
@@ -22,7 +24,7 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
     public void beforeEach(ExtensionContext context) throws Exception {
         DBUser annotation = context.getRequiredTestMethod().getAnnotation(DBUser.class);
         if (annotation != null) {
-            UserEntity user = new UserEntity();
+            AuthUserEntity user = new AuthUserEntity();
             if (annotation.username().isEmpty() && annotation.password().isEmpty()) {
                 user.setUsername(new Faker().name().username());
                 user.setPassword(new Faker().internet().password());
@@ -47,26 +49,31 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
                         return ae;
                     }).toList()
             );
-            context.getStore(NAMESPACE).put("user", user);
             authUserDAO.createUser(user);
-            userDataUserDAO.createUserInUserData(user);
+
+            UserDataUserEntity userdataUser = new UserDataUserEntity();
+            userdataUser.setUsername(user.getUsername());
+            userdataUser.setCurrency(CurrencyValues.RUB);
+            userDataUserDAO.createUserInUserData(userdataUser);
+
+            context.getStore(NAMESPACE).put(context.getUniqueId(), user);
         }
     }
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        var user = context.getStore(NAMESPACE).get("user", UserEntity.class);
-        userDataUserDAO.deleteUserByUsernameInUserData(user.getUsername());
+        var user = context.getStore(NAMESPACE).get(context.getUniqueId(), AuthUserEntity.class);
         authUserDAO.deleteUserById(user.getId());
+        userDataUserDAO.deleteUserByUsernameInUserData(user.getUsername());
     }
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().getType().isAssignableFrom(UserEntity.class);
+        return parameterContext.getParameter().getType().isAssignableFrom(AuthUserEntity.class);
     }
 
     @Override
-    public UserEntity resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(DBUserExtension.NAMESPACE).get("user", UserEntity.class);
+    public AuthUserEntity resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+        return extensionContext.getStore(DBUserExtension.NAMESPACE).get(extensionContext.getUniqueId(),  AuthUserEntity.class);
     }
 }
