@@ -1,8 +1,8 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.db.model.UserEntity;
-import guru.qa.niffler.jupiter.DBUser;
+import guru.qa.niffler.db.model.auth.AuthUserEntity;
+import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -12,7 +12,7 @@ public class DBUserExtensionWithoutUsernameOrPassWebTest extends BaseWebTest {
 
     @DBUser()
     @Test
-    void dbUserExtensionWithoutUsernameAndPassWebTest(UserEntity userForTest) {
+    void dbUserExtensionWithoutUsernameAndPassWebTest(AuthUserEntity userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(userForTest.getUsername());
@@ -23,7 +23,7 @@ public class DBUserExtensionWithoutUsernameOrPassWebTest extends BaseWebTest {
 
     @DBUser(username = "susan")
     @Test
-    void dbUserExtensionWithoutPassWebTest(UserEntity userForTest) {
+    void dbUserExtensionWithoutPassWebTest(AuthUserEntity userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(userForTest.getUsername());
@@ -34,7 +34,7 @@ public class DBUserExtensionWithoutUsernameOrPassWebTest extends BaseWebTest {
 
     @DBUser(password = "12345")
     @Test
-    void dbUserExtensionWithoutUsername(UserEntity userForTest) {
+    void dbUserExtensionWithoutUsername(AuthUserEntity userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(userForTest.getUsername());

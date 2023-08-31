@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthUserDAO;
 import guru.qa.niffler.db.dao.UserDataUserDAO;
 import guru.qa.niffler.db.dao.impl.AuthUserDAOJdbc;
+import guru.qa.niffler.db.dao.impl.AuthUserDAOSpringJdbc;
 import guru.qa.niffler.db.model.CurrencyValues;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
@@ -16,8 +17,8 @@ import java.util.Arrays;
 
 public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
-    private static final AuthUserDAO authUserDAO = new AuthUserDAOJdbc();
-    private static final UserDataUserDAO userDataUserDAO = new AuthUserDAOJdbc();
+    private static final AuthUserDAO authUserDAO = new AuthUserDAOSpringJdbc();
+    private static final UserDataUserDAO userDataUserDAO = new AuthUserDAOSpringJdbc();
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBUserExtension.class);
 
     @Override

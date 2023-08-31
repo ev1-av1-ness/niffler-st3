@@ -1,7 +1,7 @@
 package guru.qa.niffler.test;
 
 import guru.qa.niffler.db.dao.AuthUserDAO;
-import guru.qa.niffler.db.dao.impl.AuthUserDAOJdbc;
+import guru.qa.niffler.db.dao.impl.AuthUserDAOSpringJdbc;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +15,7 @@ public class DBUserTests {
     )
     @Test
     void dbUserCreateReadAndDeleteTest(AuthUserEntity userEntity) {
-        AuthUserDAO authUserDAO = new AuthUserDAOJdbc();
+        AuthUserDAO authUserDAO = new AuthUserDAOSpringJdbc();
         AuthUserEntity getUser = authUserDAO.getUserById(userEntity.getId());
 
         Assertions.assertEquals(userEntity.getUsername(), getUser.getUsername());
@@ -27,7 +27,7 @@ public class DBUserTests {
     )
     @Test
     void dbUserCreateUpdateAndReadTest(AuthUserEntity userEntity) {
-        AuthUserDAO authUserDAO = new AuthUserDAOJdbc();
+        AuthUserDAO authUserDAO = new AuthUserDAOSpringJdbc();
         userEntity.setEnabled(false);
         authUserDAO.updateUser(userEntity);
 
