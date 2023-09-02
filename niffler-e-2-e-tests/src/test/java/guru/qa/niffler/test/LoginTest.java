@@ -38,7 +38,7 @@ public class LoginTest extends BaseWebTest {
     @BeforeEach
     void createUser() {
         authUser = new AuthUserEntity();
-        authUser.setUsername("valentin_12");
+        authUser.setUsername("valentin_15");
         authUser.setPassword(defaultPassword);
         authUser.setEnabled(true);
         authUser.setAccountNonExpired(true);
@@ -54,7 +54,7 @@ public class LoginTest extends BaseWebTest {
         authUserDAO.createUser(authUser);
 
         userdataUser = new UserDataUserEntity();
-        userdataUser.setUsername("valentin_12");
+        userdataUser.setUsername("valentin_15");
         userdataUser.setCurrency(CurrencyValues.RUB);
         userDataUserDAO.createUserInUserData(userdataUser);
     }
