@@ -1,9 +1,7 @@
 package guru.qa.niffler.test;
 
 import guru.qa.niffler.db.dao.AuthUserDAO;
-import guru.qa.niffler.db.dao.UserDataUserDAO;
 import guru.qa.niffler.db.dao.impl.AuthUserDAOHibernate;
-import guru.qa.niffler.db.dao.impl.UserdataUserDAOHibernate;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class DBUserTests {
 
     @DBUser(
-            username = "elizav",
+            username = "elizaveta",
             password = "12345"
     )
     @Test
@@ -24,7 +22,7 @@ public class DBUserTests {
     }
 
     @DBUser(
-            username = "eliza",
+            username = "elizium",
             password = "12345"
     )
     @Test
