@@ -13,7 +13,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 public class DBUserTests {
 
     @DBUser(
-            username = "elizaveta",
+            username = "elizaveta1",
             password = "12345"
     )
     @AllureId("342")

@@ -11,6 +11,7 @@ import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.jupiter.annotation.DBUser;
 import guru.qa.niffler.jupiter.annotation.Dao;
 import guru.qa.niffler.jupiter.extension.DaoExtension;
 import io.qameta.allure.AllureId;
@@ -41,7 +42,7 @@ public class LoginTest extends BaseWebTest {
     @BeforeEach
     void createUser() {
         authUser = new AuthUserEntity();
-        authUser.setUsername("valentin_17");
+        authUser.setUsername("valentin_18");
         authUser.setPassword(defaultPassword);
         authUser.setEnabled(true);
         authUser.setAccountNonExpired(true);
@@ -57,7 +58,7 @@ public class LoginTest extends BaseWebTest {
         authUserDAO.createUser(authUser);
 
         userdataUser = new UserDataUserEntity();
-        userdataUser.setUsername("valentin_17");
+        userdataUser.setUsername("valentin_18");
         userdataUser.setCurrency(CurrencyValues.RUB);
         userDataUserDAO.createUserInUserData(userdataUser);
     }
@@ -88,5 +89,42 @@ public class LoginTest extends BaseWebTest {
         $("input[name='password']").setValue("wrongpassword");
         $("button[type='submit']").click();
         $(".form__error").should(text("Bad credentials"));
+    }
+
+    @Test
+    @AllureId("956")
+    void registerUser() {
+        Selenide.open("http://127.0.0.1:3000/main");
+        $("a[href*='register']").click();
+        $("input[name='username']").setValue(new Faker().name().username());
+        $("input[name='password']").setValue(defaultPassword);
+        $("input[name='passwordSubmit']").setValue(defaultPassword);
+        $("button[type='submit']").click();
+        $$(".form__paragraph").first().should(text("Congratulations! You've registered!"));
+        $("a[href*='redirect']").should(interactable);
+    }
+
+    @Test
+    @AllureId("957")
+    void registerUserWithTheNotSamePass() {
+        Selenide.open("http://127.0.0.1:3000/main");
+        $("a[href*='register']").click();
+        $("input[name='username']").setValue(new Faker().name().username());
+        $("input[name='password']").setValue(defaultPassword);
+        $("input[name='passwordSubmit']").setValue(new Faker().internet().password());
+        $("button[type='submit']").click();
+        $(".form__error").should(text("Passwords should be equal"));
+    }
+
+    @Test
+    @AllureId("958")
+    void registerUserWithTheSameName() {
+        Selenide.open("http://127.0.0.1:3000/main");
+        $("a[href*='register']").click();
+        $("input[name='username']").setValue(authUser.getUsername());
+        $("input[name='password']").setValue(defaultPassword);
+        $("input[name='passwordSubmit']").setValue(defaultPassword);
+        $("button[type='submit']").click();
+        $(".form__error").should(partialText("already exists"));
     }
 }
