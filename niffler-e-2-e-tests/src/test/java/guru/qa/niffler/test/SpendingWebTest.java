@@ -1,26 +1,25 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.page.WelcomePage;
+import io.qameta.allure.Allure;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
-public class SpendingWebTest {
-
-    static {
-        Configuration.browser = "chrome";
-        Configuration.browserSize = "1980x1024";
-    }
+@Isolated
+public class SpendingWebTest extends BaseWebTest {
 
     @BeforeEach
     void doLogin() {
