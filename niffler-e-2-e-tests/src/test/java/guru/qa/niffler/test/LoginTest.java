@@ -94,8 +94,7 @@ public class LoginTest extends BaseWebTest {
     @Test
     @AllureId("956")
     void registerUser() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='register']").click();
+        Selenide.open("http://127.0.0.1:9000/register");
         $("input[name='username']").setValue(new Faker().name().username());
         $("input[name='password']").setValue(defaultPassword);
         $("input[name='passwordSubmit']").setValue(defaultPassword);
@@ -107,8 +106,7 @@ public class LoginTest extends BaseWebTest {
     @Test
     @AllureId("957")
     void registerUserWithTheNotSamePass() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='register']").click();
+        Selenide.open("http://127.0.0.1:9000/register");
         $("input[name='username']").setValue(new Faker().name().username());
         $("input[name='password']").setValue(defaultPassword);
         $("input[name='passwordSubmit']").setValue(new Faker().internet().password());
@@ -119,8 +117,7 @@ public class LoginTest extends BaseWebTest {
     @Test
     @AllureId("958")
     void registerUserWithTheSameName() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='register']").click();
+        Selenide.open("http://127.0.0.1:9000/register");
         $("input[name='username']").setValue(authUser.getUsername());
         $("input[name='password']").setValue(defaultPassword);
         $("input[name='passwordSubmit']").setValue(defaultPassword);
