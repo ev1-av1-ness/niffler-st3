@@ -28,7 +28,7 @@ public class DaoExtension implements TestInstancePostProcessor {
                 } else if ("spring".equals(System.getProperty("db.impl"))) {
                     dao = new AuthUserDAOSpringJdbc();
                 } else {
-                    dao = new AuthUserDAOHibernate();
+                    dao = new AuthUserDAOSpringJdbc();
                 }
 
                 field.set(testInstance, dao);
@@ -45,5 +45,6 @@ public class DaoExtension implements TestInstancePostProcessor {
                 field.set(testInstance, userDAO);
             }
         }
+
     }
 }
