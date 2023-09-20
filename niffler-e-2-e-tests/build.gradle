@@ -3,7 +3,7 @@ buildscript {
         protobufVersion = '3.21.12'
         grpcVersion = '1.52.1'
         allureVersion = '2.21.0'
-        selenideVersion = '6.18.0'
+        selenideVersion = '6.17.0'
     }
 }
 
@@ -83,7 +83,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     // REST
     testImplementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    testImplementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+    testImplementation ('com.squareup.retrofit2:converter-jackson:2.9.0'){
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    }
     testImplementation 'com.squareup.okhttp3:logging-interceptor:3.14.9'
     // DB
     testImplementation 'org.springframework:spring-jdbc:6.0.4'
