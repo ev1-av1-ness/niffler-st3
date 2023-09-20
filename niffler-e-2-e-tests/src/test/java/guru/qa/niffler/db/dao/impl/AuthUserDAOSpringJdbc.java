@@ -7,7 +7,9 @@ import guru.qa.niffler.db.jdbc.DataSourceProvider;
 import guru.qa.niffler.db.model.CurrencyValues;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
+import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.db.springjdbc.AuthorityEntityRowMapper;
 import guru.qa.niffler.db.springjdbc.UserEntityRowMapper;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +21,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.UUID;
 
 public class AuthUserDAOSpringJdbc implements AuthUserDAO, UserDataUserDAO {
@@ -58,6 +61,7 @@ public class AuthUserDAOSpringJdbc implements AuthUserDAO, UserDataUserDAO {
                 return ps;
             }, kh);
             final UUID userId = (UUID) kh.getKeyList().get(0).get("id");
+            user.setId(userId);
             authJdbcTemplate.batchUpdate("INSERT INTO authorities (user_id, authority) VALUES (?, ?)", new BatchPreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -76,21 +80,56 @@ public class AuthUserDAOSpringJdbc implements AuthUserDAO, UserDataUserDAO {
 
     @Override
     public AuthUserEntity updateUser(AuthUserEntity user) {
-        return null;
+        authJdbcTemplate.update("UPDATE users SET " +
+                        "username = ?, " +
+                        "password = ?, " +
+                        "enabled = ?, " +
+                        "account_non_expired = ?," +
+                        "account_non_locked = ? " +
+                        "WHERE id = ?",
+                user.getUsername(),
+                pe.encode(user.getPassword()),
+                user.getEnabled(),
+                user.getAccountNonExpired(),
+                user.getAccountNonLocked(),
+                user.getId()
+        );
+        return user;
     }
 
     @Override
     public void deleteUserById(UUID userId) {
-
+        authTtpl.execute(status -> {
+            authJdbcTemplate.update(con -> {
+                PreparedStatement authorityPs = con.prepareStatement("DELETE from authorities WHERE user_id = ?");
+                authorityPs.setObject(1, userId);
+                return authorityPs;
+            });
+            authJdbcTemplate.update(con -> {
+                PreparedStatement usersPs = con.prepareStatement("DELETE from users WHERE id = ?");
+                usersPs.setObject(1, userId);
+                return usersPs;
+            });
+            return 1;
+        });
     }
 
     @Override
     public AuthUserEntity getUserById(UUID userId) {
-        return authJdbcTemplate.queryForObject(
-                "SELECT * FROM users WHERE id = ? ",
+        AuthUserEntity user = authJdbcTemplate.queryForObject(
+                "SELECT * FROM users WHERE id = ?",
                 UserEntityRowMapper.instance,
                 userId
         );
+
+        List<AuthorityEntity> authorities = authJdbcTemplate.query(
+                "SELECT * FROM authorities WHERE user_id = ?",
+                AuthorityEntityRowMapper.instance,
+                userId
+        );
+
+        user.setAuthorities(authorities);
+        return user;
     }
 
     @Override

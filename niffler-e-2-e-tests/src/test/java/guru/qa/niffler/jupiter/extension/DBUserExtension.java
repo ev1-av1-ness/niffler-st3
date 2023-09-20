@@ -1,8 +1,10 @@
 package guru.qa.niffler.jupiter.extension;
 
+import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthUserDAO;
 import guru.qa.niffler.db.dao.UserDataUserDAO;
 import guru.qa.niffler.db.dao.impl.AuthUserDAOJdbc;
+import guru.qa.niffler.db.dao.impl.AuthUserDAOSpringJdbc;
 import guru.qa.niffler.db.model.CurrencyValues;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
@@ -15,8 +17,8 @@ import java.util.Arrays;
 
 public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
-    private static final AuthUserDAO authUserDAO = new AuthUserDAOJdbc();
-    private static final UserDataUserDAO userDataUserDAO = new AuthUserDAOJdbc();
+    private static final AuthUserDAO authUserDAO = new AuthUserDAOSpringJdbc();
+    private static final UserDataUserDAO userDataUserDAO = new AuthUserDAOSpringJdbc();
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBUserExtension.class);
 
     @Override
@@ -24,8 +26,19 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
         DBUser annotation = context.getRequiredTestMethod().getAnnotation(DBUser.class);
         if (annotation != null) {
             AuthUserEntity user = new AuthUserEntity();
-            user.setUsername(annotation.username());
-            user.setPassword(annotation.password());
+            if (annotation.username().isEmpty() && annotation.password().isEmpty()) {
+                user.setUsername(new Faker().name().username());
+                user.setPassword(new Faker().internet().password());
+            } else if (annotation.username().isEmpty()) {
+                user.setUsername(new Faker().name().username());
+                user.setPassword(annotation.password());
+            } else if (annotation.password().isEmpty()) {
+                user.setUsername(annotation.username());
+                user.setPassword(new Faker().internet().password());
+            } else {
+                user.setUsername(annotation.username());
+                user.setPassword(annotation.password());
+            }
             user.setEnabled(true);
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);
