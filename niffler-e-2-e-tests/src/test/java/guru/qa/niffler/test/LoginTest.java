@@ -118,7 +118,7 @@ public class LoginTest extends BaseWebTest {
     @AllureId("958")
     void registerUserWithTheSameName() {
         Selenide.open("http://127.0.0.1:9000/register");
-        $("input[name='username']").setValue(authUser.getUsername());
+        $("input[name='username']").setValue("barsik");
         $("input[name='password']").setValue(defaultPassword);
         $("input[name='passwordSubmit']").setValue(defaultPassword);
         $("button[type='submit']").click();
