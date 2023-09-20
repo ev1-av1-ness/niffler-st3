@@ -3,8 +3,8 @@ package guru.qa.niffler.jupiter.extension;
 import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthUserDAO;
 import guru.qa.niffler.db.dao.UserDataUserDAO;
-import guru.qa.niffler.db.dao.impl.AuthUserDAOJdbc;
-import guru.qa.niffler.db.dao.impl.AuthUserDAOSpringJdbc;
+import guru.qa.niffler.db.dao.impl.AuthUserDAOHibernate;
+import guru.qa.niffler.db.dao.impl.UserdataUserDAOHibernate;
 import guru.qa.niffler.db.model.CurrencyValues;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
@@ -14,11 +14,12 @@ import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.extension.*;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
-    private static final AuthUserDAO authUserDAO = new AuthUserDAOSpringJdbc();
-    private static final UserDataUserDAO userDataUserDAO = new AuthUserDAOSpringJdbc();
+    private static final AuthUserDAO authUserDAO = new AuthUserDAOHibernate();
+    private static final UserDataUserDAO userDataUserDAO = new UserdataUserDAOHibernate();
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBUserExtension.class);
 
     @Override
@@ -47,8 +48,9 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
                     .map(authority -> {
                         var ae = new AuthorityEntity();
                         ae.setAuthority(authority);
+                        ae.setUser(user);
                         return ae;
-                    }).toList()
+                    }).collect(Collectors.toList())
             );
             authUserDAO.createUser(user);
 

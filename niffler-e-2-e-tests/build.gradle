@@ -83,7 +83,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     // REST
     testImplementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    testImplementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+    testImplementation ('com.squareup.retrofit2:converter-jackson:2.9.0'){
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    }
     testImplementation 'com.squareup.okhttp3:logging-interceptor:3.14.9'
     // DB
     testImplementation 'org.springframework:spring-jdbc:6.0.4'
@@ -102,12 +104,19 @@ dependencies {
     testImplementation("io.qameta.allure:allure-selenide:${allureVersion}") {
         exclude group: 'com.codeborne'
     }
-    testImplementation "io.qameta.allure:allure-okhttp3:${allureVersion}"
-    testImplementation "io.qameta.allure:allure-grpc:${allureVersion}"
+    testImplementation ("io.qameta.allure:allure-okhttp3:${allureVersion}"){
+        exclude group: 'com.squareup.okhttp3'
+    }
+    testImplementation ("io.qameta.allure:allure-grpc:${allureVersion}"){
+        exclude group: 'io.grpc', module: 'grpc-core'
+        exclude group: 'com.google.protobuf'
+    }
     // WEB
     testImplementation "com.codeborne:selenide:${selenideVersion}"
     // Utils
-    testImplementation 'com.github.javafaker:javafaker:1.0.2'
+    testImplementation('com.github.javafaker:javafaker:1.0.2') {
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    }
     testImplementation 'commons-io:commons-io:2.11.0'
     testImplementation 'com.google.code.findbugs:jsr305:3.0.2'
     // gRPC
@@ -125,7 +134,12 @@ dependencies {
     // Kafka
     testImplementation 'org.apache.kafka:kafka-clients:3.5.0'
     // Wiremock
-    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+    testImplementation ('com.github.tomakehurst:wiremock-jre8:2.35.0') {
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-annotations'
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+        exclude group: 'com.fasterxml.jackson', module: 'jackson-bom'
+    }
     testImplementation 'com.github.tomakehurst:wiremock-standalone:2.27.2'
 }
 

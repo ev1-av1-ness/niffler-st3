@@ -1,6 +1,7 @@
 package guru.qa.niffler.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.qameta.allure.internal.shadowed.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.UUID;
