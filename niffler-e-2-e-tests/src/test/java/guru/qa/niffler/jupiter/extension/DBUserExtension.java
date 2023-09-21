@@ -2,7 +2,7 @@ package guru.qa.niffler.jupiter.extension;
 
 import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthUserDAO;
-import guru.qa.niffler.db.dao.UserDataUserDAO;
+import guru.qa.niffler.db.dao.UserdataUserDAO;
 import guru.qa.niffler.db.dao.impl.AuthUserDAOHibernate;
 import guru.qa.niffler.db.dao.impl.UserdataUserDAOHibernate;
 import guru.qa.niffler.db.model.CurrencyValues;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
     private static final AuthUserDAO authUserDAO = new AuthUserDAOHibernate();
-    private static final UserDataUserDAO userDataUserDAO = new UserdataUserDAOHibernate();
+    private static final UserdataUserDAO userDataUserDAO = new UserdataUserDAOHibernate();
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBUserExtension.class);
 
     @Override
@@ -66,8 +66,8 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
         var user = context.getStore(NAMESPACE).get(context.getUniqueId(), AuthUserEntity.class);
-        authUserDAO.deleteUserById(user.getId());
-        userDataUserDAO.deleteUserByUsernameInUserData(user.getUsername());
+        authUserDAO.deleteUser(user);
+        userDataUserDAO.deleteUserInUserData(userDataUserDAO.getUserInUserDataByUsername(user.getUsername()));
     }
 
     @Override
