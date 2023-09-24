@@ -10,6 +10,8 @@ import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.db.repository.UserRepository;
+import guru.qa.niffler.db.repository.UserRepositoryHibernate;
 import guru.qa.niffler.jupiter.annotation.DBUser;
 import org.junit.jupiter.api.extension.*;
 
@@ -18,8 +20,7 @@ import java.util.stream.Collectors;
 
 public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
-    private static final AuthUserDAO authUserDAO = new AuthUserDAOHibernate();
-    private static final UserdataUserDAO userDataUserDAO = new UserdataUserDAOHibernate();
+    private final UserRepository userRepository = new UserRepositoryHibernate();
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBUserExtension.class);
 
     @Override
@@ -52,12 +53,7 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
                         return ae;
                     }).collect(Collectors.toList())
             );
-            authUserDAO.createUser(user);
-
-            UserDataUserEntity userdataUser = new UserDataUserEntity();
-            userdataUser.setUsername(user.getUsername());
-            userdataUser.setCurrency(CurrencyValues.RUB);
-            userDataUserDAO.createUserInUserData(userdataUser);
+            userRepository.createUserForTest(user);
 
             context.getStore(NAMESPACE).put(context.getUniqueId(), user);
         }
@@ -66,13 +62,15 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
         var user = context.getStore(NAMESPACE).get(context.getUniqueId(), AuthUserEntity.class);
-        authUserDAO.deleteUser(user);
-        userDataUserDAO.deleteUserInUserData(userDataUserDAO.getUserInUserDataByUsername(user.getUsername()));
+        if (user != null) {
+            userRepository.removeAfterTest(user);
+        }
     }
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().getType().isAssignableFrom(AuthUserEntity.class);
+        return parameterContext.getParameter().getType().isAssignableFrom(AuthUserEntity.class)
+                && extensionContext.getRequiredTestMethod().isAnnotationPresent(DBUser.class);
     }
 
     @Override
