@@ -27,36 +27,36 @@ public class SessionStorageContext {
         setCodeVerifier(codeVerifier);
     }
 
-    public void setCodeChallenge(String codeChallenge) {
-        store.put(CODE_CHALLENGE_KEY, codeChallenge);
-    }
-
-    public void setCodeVerifier(String codeVerifier) {
-        store.put(CODE_VERIFIER_KEY, codeVerifier);
-    }
-
-    public void setToken(String token) {
-        store.put(TOKEN_KEY, token);
-    }
-
-    public void setCode(String code) {
-        store.put(CODE_KEY, code);
-    }
-
     public String getCodeChallenge() {
         return store.get(CODE_CHALLENGE_KEY);
+    }
+
+    public void setCodeChallenge(String codeChallenge) {
+        store.put(CODE_CHALLENGE_KEY, codeChallenge);
     }
 
     public String getCodeVerifier() {
         return store.get(CODE_VERIFIER_KEY);
     }
 
+    public void setCodeVerifier(String codeVerifier) {
+        store.put(CODE_VERIFIER_KEY, codeVerifier);
+    }
+
     public String getToken() {
         return store.get(TOKEN_KEY);
     }
 
+    public void setToken(String token) {
+        store.put(TOKEN_KEY, token);
+    }
+
     public String getCode() {
         return store.get(CODE_KEY);
+    }
+
+    public void setCode(String code) {
+        store.put(CODE_KEY, code);
     }
 
     public void clearContext() {

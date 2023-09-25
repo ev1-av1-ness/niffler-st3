@@ -31,15 +31,19 @@ public class DBUserExtension implements BeforeEachCallback, AfterTestExecutionCa
             if (annotation.username().isEmpty() && annotation.password().isEmpty()) {
                 user.setUsername(new Faker().name().username());
                 user.setPassword(new Faker().internet().password());
+                user.setEncodedPassword(user.getPassword());
             } else if (annotation.username().isEmpty()) {
                 user.setUsername(new Faker().name().username());
                 user.setPassword(annotation.password());
+                user.setEncodedPassword(user.getPassword());
             } else if (annotation.password().isEmpty()) {
                 user.setUsername(annotation.username());
                 user.setPassword(new Faker().internet().password());
+                user.setEncodedPassword(user.getPassword());
             } else {
                 user.setUsername(annotation.username());
                 user.setPassword(annotation.password());
+                user.setEncodedPassword(user.getPassword());
             }
             user.setEnabled(true);
             user.setAccountNonExpired(true);
