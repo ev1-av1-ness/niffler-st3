@@ -28,4 +28,8 @@ public interface Config {
     }
 
     String nifflerAuthUrl();
+
+    String getCurrencyGrpcAddress();
+
+    int getCurrencyGrpcPort();
 }
