@@ -34,16 +34,12 @@ public class NifflerCurrencyGrpcTest extends BaseGrpcTest {
         );
         final List<Currency> currenciesList = allCurrencies.getAllCurrenciesList();
 
-        step("Check that response contains the currency", () -> {
-            assertEquals(4, currenciesList.size());
-        });
+        step("Check that response contains the currency", () -> assertEquals(4, currenciesList.size()));
 
-        step("Check the currency rate", () -> {
-            assertEquals(expectedRate, currenciesList.stream()
-                    .filter(c -> c.getCurrency() == currency)
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError("Currency not found in the response")).getCurrencyRate());
-        });
+        step("Check the currency rate", () -> assertEquals(expectedRate, currenciesList.stream()
+                .filter(c -> c.getCurrency() == currency)
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Currency not found in the response")).getCurrencyRate()));
     }
 
 

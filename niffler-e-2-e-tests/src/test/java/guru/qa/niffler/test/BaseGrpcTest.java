@@ -13,7 +13,7 @@ public class BaseGrpcTest {
 
     protected static final Config CFG = Config.getInstance();
     protected static final Empty EMPTY = Empty.getDefaultInstance();
-    private static Channel channel;
+    private static final Channel channel;
 
     static {
         channel = ManagedChannelBuilder
