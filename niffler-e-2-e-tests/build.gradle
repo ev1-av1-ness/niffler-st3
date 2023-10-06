@@ -110,7 +110,6 @@ dependencies {
     }
     testImplementation ("io.qameta.allure:allure-grpc:${allureVersion}"){
         exclude group: 'io.grpc', module: 'grpc-core'
-        exclude group: 'com.google.protobuf'
     }
     // WEB
     testImplementation "com.codeborne:selenide:${selenideVersion}"

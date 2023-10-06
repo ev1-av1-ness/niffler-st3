@@ -42,14 +42,13 @@ public class NifflerCurrencyGrpcTest extends BaseGrpcTest {
                 .orElseThrow(() -> new AssertionError("Currency not found in the response")).getCurrencyRate()));
     }
 
-
     static Stream<Arguments> calculateCurrencyRateTest() {
         return Stream.of(
-                Arguments.of(CurrencyValues.USD, CurrencyValues.RUB, 200.0, 7777.77),
-                Arguments.of(CurrencyValues.RUB, CurrencyValues.USD, 150.0, 2.0),
+                Arguments.of(CurrencyValues.USD, CurrencyValues.RUB, 200.0, 13333.33),
+                Arguments.of(CurrencyValues.RUB, CurrencyValues.USD, 150.0, 2.25),
                 Arguments.of(CurrencyValues.USD, CurrencyValues.USD, 200.0, 200.0),
                 Arguments.of(CurrencyValues.USD, CurrencyValues.KZT, 200.0, 95238.10),
-                Arguments.of(CurrencyValues.KZT, CurrencyValues.EUR, 200.0, 0.38),
+                Arguments.of(CurrencyValues.KZT, CurrencyValues.EUR, 200.0, 0.39),
                 Arguments.of(CurrencyValues.KZT, CurrencyValues.USD, -200.0, -0.42),
                 Arguments.of(CurrencyValues.USD, CurrencyValues.KZT, -200.0, -95238.10)
         );

@@ -2,6 +2,7 @@ package guru.qa.niffler.test;
 
 import com.google.protobuf.Empty;
 import guru.qa.grpc.niffler.grpc.NifflerCurrencyServiceGrpc;
+import guru.qa.grpc.niffler.grpc.NifflerCurrencyServiceGrpc.NifflerCurrencyServiceBlockingStub;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.GrpcTest;
 import io.grpc.Channel;
@@ -23,6 +24,6 @@ public class BaseGrpcTest {
                 .build();
     }
 
-    protected final NifflerCurrencyServiceGrpc.NifflerCurrencyServiceBlockingStub currencyStub
+    protected final NifflerCurrencyServiceBlockingStub currencyStub
             = NifflerCurrencyServiceGrpc.newBlockingStub(channel);
 }
