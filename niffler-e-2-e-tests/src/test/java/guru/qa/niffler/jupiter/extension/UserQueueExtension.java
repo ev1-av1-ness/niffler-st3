@@ -45,7 +45,7 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
 
         Map<User.UserType, UserJson> candidatesForTest = new ConcurrentHashMap<>();
             for (Parameter parameter : parameters) {
-                if (parameter.getType().isAssignableFrom(UserJson.class)) {
+                if (parameter.getType().isAssignableFrom(UserJson.class) && parameter.isAnnotationPresent(User.class)) {
                     User parameterAnnotation = parameter.getAnnotation(User.class);
                     User.UserType userType = parameterAnnotation.userType();
                     Queue<UserJson> usersQueueByType = usersQueue.get(userType);
