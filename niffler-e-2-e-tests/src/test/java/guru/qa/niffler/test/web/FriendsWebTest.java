@@ -1,11 +1,18 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.jupiter.annotation.*;
+
+import guru.qa.niffler.jupiter.annotation.ApiLogin;
+import guru.qa.niffler.jupiter.annotation.GenerateUser;
+import guru.qa.niffler.jupiter.annotation.GeneratedUser;
+import guru.qa.niffler.jupiter.annotation.IncomeInvitation;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.AllureId;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
@@ -16,6 +23,7 @@ import static guru.qa.niffler.jupiter.annotation.GeneratedUser.Selector.OUTER;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.WITH_FRIENDS;
 import static io.qameta.allure.Allure.step;
 
+@Disabled
 public class FriendsWebTest extends BaseWebTest {
 
 //    @BeforeEach

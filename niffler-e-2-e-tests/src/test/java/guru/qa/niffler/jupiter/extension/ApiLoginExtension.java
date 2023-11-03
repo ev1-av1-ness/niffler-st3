@@ -10,7 +10,6 @@ import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.GenerateUser;
 import guru.qa.niffler.jupiter.annotation.GeneratedUser;
 import guru.qa.niffler.model.UserJson;
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.Cookie;
@@ -19,7 +18,7 @@ import java.io.IOException;
 
 import static guru.qa.niffler.jupiter.extension.CreateUserExtension.NESTED;
 
-public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecutionCallback {
+public class ApiLoginExtension implements BeforeEachCallback {
 
     private final AuthServiceClient authServiceClient = new AuthServiceClient();
 
@@ -56,11 +55,5 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
         Selenide.sessionStorage().setItem("codeVerifier", sessionStorageContext.getCodeVerifier());
         Cookie jsessionIdCookie = new Cookie("JSESSIONID", CookieContext.getInstance().getJSessionIdCookieValue());
         WebDriverRunner.getWebDriver().manage().addCookie(jsessionIdCookie);
-    }
-
-    @Override
-    public void afterTestExecution(ExtensionContext extensionContext) throws Exception {
-        SessionStorageContext.getInstance().clearContext();
-        CookieContext.getInstance().clearContext();
     }
 }

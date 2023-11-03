@@ -32,4 +32,24 @@ public class LocalConfig implements Config {
     public String nifflerAuthUrl() {
         return "http://127.0.0.1:9000";
     }
+
+    @Override
+    public String nifflerUserdataUrl() {
+        return "http://127.0.0.1:8089";
+    }
+
+    @Override
+    public String nifflerCurrencyUrl() {
+        return "http://127.0.0.1";
+    }
+
+    @Override
+    public String nifflerGatewayUrl() {
+        return "http://127.0.0.1:8090";
+    }
+
+    @Override
+    public String kafkaAddress() {
+        return "localhost:9092";
+    }
 }
